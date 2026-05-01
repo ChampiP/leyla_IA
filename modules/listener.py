@@ -19,9 +19,14 @@ class WakeWordListener:
             self.recognizer.adjust_for_ambient_noise(
                 source, duration=self.config.get("ambient_duration", 1)
             )
-            audio = self.recognizer.listen(
-                source, phrase_time_limit=self.config.get("listen_timeout", 6)
-            )
+            try:
+                audio = self.recognizer.listen(
+                    source,
+                    timeout=self.config.get("listen_start_timeout", 3),
+                    phrase_time_limit=self.config.get("listen_timeout", 6),
+                )
+            except sr.WaitTimeoutError:
+                return ""
         try:
             text = self.recognizer.recognize_google(
                 audio, language=self.config.get("language", "es-ES")

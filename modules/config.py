@@ -6,6 +6,7 @@ DEFAULT_CONFIG = {
     "wake_word": "leyla",
     "language": "es-ES",
     "voice": "es-ES-ElenaNeural",
+    "listen_start_timeout": 3,
     "listen_timeout": 6,
     "ambient_duration": 1,
     "confirm_dangerous": True,
