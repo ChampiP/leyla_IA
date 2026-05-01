@@ -2,6 +2,7 @@ import threading
 import time
 import warnings
 
+import pythoncom
 import winsound
 import win32com.client
 
@@ -11,7 +12,6 @@ class Voice:
         self.voice_name = voice_name
         self._lock = threading.Lock()
         self._last_tts = 0.0
-        self._sapi_voice = None
 
     def beep_ready(self):
         winsound.MessageBeep(winsound.MB_OK)
@@ -33,19 +33,22 @@ class Voice:
                 )
 
     def _speak_with_sapi(self, text):
-        if self._sapi_voice is None:
-            self._sapi_voice = win32com.client.Dispatch("SAPI.SpVoice")
-            self._set_sapi_voice()
-        self._sapi_voice.Speak(text)
+        pythoncom.CoInitialize()
+        try:
+            sapi_voice = win32com.client.Dispatch("SAPI.SpVoice")
+            self._set_sapi_voice(sapi_voice)
+            sapi_voice.Speak(text)
+        finally:
+            pythoncom.CoUninitialize()
 
-    def _set_sapi_voice(self):
+    def _set_sapi_voice(self, sapi_voice):
         if not self.voice_name:
             return
 
         target = self.voice_name.lower()
-        for sapi_voice in self._sapi_voice.GetVoices():
-            description = sapi_voice.GetDescription().lower()
-            voice_id = sapi_voice.Id.lower()
+        for available_voice in sapi_voice.GetVoices():
+            description = available_voice.GetDescription().lower()
+            voice_id = available_voice.Id.lower()
             if target in description or target in voice_id:
-                self._sapi_voice.Voice = sapi_voice
+                sapi_voice.Voice = available_voice
                 return

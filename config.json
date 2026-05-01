@@ -1,8 +1,14 @@
 {
-  "wake_word": "leyla",
+  "assistant_name": "Leyla",
+  "wake_words": ["leyla", "leila", "sistema"],
   "language": "es-ES",
   "voice": "es-ES-ElenaNeural",
+  "ai_enabled": true,
+  "gemini_model": "gemini-2.5-flash",
+  "listen_start_timeout": 3,
   "listen_timeout": 6,
+  "command_start_timeout": 5,
+  "command_timeout": 8,
   "ambient_duration": 1,
   "confirm_dangerous": true,
   "apps": {
@@ -10,11 +16,24 @@
     "explorador": "explorer.exe",
     "notepad": "notepad.exe",
     "powershell": "powershell.exe",
-    "cmd": "cmd.exe"
+    "cmd": "cmd.exe",
+    "spotify": "spotify",
+    "chrome": "chrome.exe",
+    "whatsapp": "whatsapp"
   },
   "folders": {
     "descargas": "{USERPROFILE}\\Downloads",
     "documentos": "{USERPROFILE}\\Documents",
-    "escritorio": "{USERPROFILE}\\Desktop"
+    "escritorio": "{USERPROFILE}\\Desktop",
+    "imagenes": "{USERPROFILE}\\Pictures",
+    "musica": "{USERPROFILE}\\Music",
+    "videos": "{USERPROFILE}\\Videos"
+  },
+  "websites": {
+    "youtube": "https://www.youtube.com",
+    "gmail": "https://mail.google.com",
+    "whatsapp": "https://web.whatsapp.com",
+    "google": "https://www.google.com",
+    "spotify web": "https://open.spotify.com"
   }
 }
