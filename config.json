@@ -1,0 +1,20 @@
+{
+  "wake_word": "leyla",
+  "language": "es-ES",
+  "voice": "es-ES-ElenaNeural",
+  "listen_timeout": 6,
+  "ambient_duration": 1,
+  "confirm_dangerous": true,
+  "apps": {
+    "calculadora": "calc.exe",
+    "explorador": "explorer.exe",
+    "notepad": "notepad.exe",
+    "powershell": "powershell.exe",
+    "cmd": "cmd.exe"
+  },
+  "folders": {
+    "descargas": "{USERPROFILE}\\Downloads",
+    "documentos": "{USERPROFILE}\\Documents",
+    "escritorio": "{USERPROFILE}\\Desktop"
+  }
+}
