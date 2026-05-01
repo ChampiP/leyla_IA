@@ -9,7 +9,6 @@ from urllib.parse import quote_plus
 
 import pyautogui
 import win32clipboard
-from PIL import Image
 
 from modules.ai_router import GeminiCommandRouter
 
@@ -99,7 +98,9 @@ class CommandHandler:
             "que puedes hacer leyla",
             "que puedes hacer leila",
         }:
-            self.voice.speak("Puedo abrir apps, buscar, controlar ventanas, musica, capturas y whatsapp.")
+            self.voice.speak(
+                "Puedo abrir apps, buscar, controlar ventanas, musica, capturas y whatsapp."
+            )
             print(self.help_text(), flush=True)
             return True
 
@@ -134,8 +135,18 @@ class CommandHandler:
             if query:
                 return self._play_on_youtube(query)
 
+        if command.startswith("reproducir "):
+            query = command.replace("reproducir", "", 1).strip()
+            if query:
+                return self._play_on_youtube(query)
+
         if command.startswith("pon musica "):
             query = command.replace("pon musica", "", 1).strip()
+            if query:
+                return self._play_on_youtube(query)
+
+        if command.startswith("pon "):
+            query = command.replace("pon", "", 1).strip()
             if query:
                 return self._play_on_youtube(query)
 
@@ -200,23 +211,23 @@ class CommandHandler:
             pyautogui.hotkey("alt", "f4")
             return True
 
-        if command in {"copiar"}:
+        if command == "copiar":
             pyautogui.hotkey("ctrl", "c")
             return True
 
-        if command in {"pegar"}:
+        if command == "pegar":
             pyautogui.hotkey("ctrl", "v")
             return True
 
-        if command in {"cortar"}:
+        if command == "cortar":
             pyautogui.hotkey("ctrl", "x")
             return True
 
-        if command in {"guardar"}:
+        if command == "guardar":
             pyautogui.hotkey("ctrl", "s")
             return True
 
-        if command in {"seleccionar todo"}:
+        if command == "seleccionar todo":
             pyautogui.hotkey("ctrl", "a")
             return True
 
@@ -224,7 +235,7 @@ class CommandHandler:
             pyautogui.press("enter")
             return True
 
-        if command in {"cerrar navegador"}:
+        if command == "cerrar navegador":
             self.voice.speak("No puedo cerrar el navegador de forma fiable.")
             return True
 
@@ -280,7 +291,7 @@ class CommandHandler:
             subprocess.run(["rundll32.exe", "user32.dll,LockWorkStation"], check=False)
             return True
 
-        if "minimizar todo" in command or command in {"mostrar escritorio"}:
+        if "minimizar todo" in command or command == "mostrar escritorio":
             pyautogui.hotkey("win", "d")
             return True
 
@@ -323,6 +334,7 @@ class CommandHandler:
             "- buscar gatos en google",
             "- buscar lofi en youtube",
             "- reproducir musica bad bunny",
+            "- reproducir bohemian rhapsody",
             "- reproducir en youtube lofi hip hop",
             "- pausar musica / siguiente cancion / cancion anterior",
             "- subir volumen / bajar volumen / silenciar",
@@ -386,8 +398,8 @@ class CommandHandler:
 
     def _review_whatsapp(self):
         self._open_whatsapp()
-        self.voice.speak("Estoy revisando WhatsApp.")
-        time.sleep(5)
+        self.voice.speak("Estoy revisando WhatsApp. Deja la ventana visible un momento.")
+        time.sleep(self.config.get("whatsapp_review_delay", 5))
 
         temp_file = os.path.join(tempfile.gettempdir(), "leyla_whatsapp.png")
         pyautogui.screenshot().save(temp_file)
@@ -410,6 +422,7 @@ class CommandHandler:
         if not query:
             self.voice.speak("Dime que quieres reproducir.")
             return True
+
         lucky_query = quote_plus(f"site:youtube.com/watch {query}")
         url = f"https://www.google.com/search?btnI=I&q={lucky_query}"
         webbrowser.open_new_tab(url)
@@ -520,7 +533,7 @@ class CommandHandler:
         return " ".join(words).strip()
 
     def _is_yes(self, text):
-        return text in {"si", "sí", "claro", "editar", "yes"}
+        return text in {"si", "claro", "editar", "yes"}
 
     def _is_no(self, text):
         return text in {"no", "nop", "negativo"}
@@ -532,6 +545,7 @@ class CommandHandler:
             "buscar en youtube musica lofi",
             "buscar en spotify bad bunny",
             "reproducir musica despacito",
+            "reproducir bohemian rhapsody",
             "reproducir en youtube lofi hip hop",
             "pausar musica",
             "siguiente cancion",
